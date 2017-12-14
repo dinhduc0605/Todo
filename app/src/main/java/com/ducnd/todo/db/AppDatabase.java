@@ -12,15 +12,17 @@ import android.content.Context;
 import com.ducnd.todo.model.Job;
 
 @Database(entities = {Job.class}, version = 1)
-public abstract class AppDatabse extends RoomDatabase {
-    public static final String DATABASE_NAME = "todo-db";
-    private static AppDatabse sDatabase;
+public abstract class AppDatabase extends RoomDatabase {
+    private static final String DATABASE_NAME = "todo-db";
+    private static AppDatabase sDatabase;
 
     public abstract JobDao mJobDao();
 
-    public static AppDatabse getInstance(Context context){
+    public static AppDatabase getInstance(Context context){
         if (sDatabase == null){
-            sDatabase = Room.databaseBuilder(context, AppDatabse.class, DATABASE_NAME).build();
+            synchronized (AppDatabase.class){
+                sDatabase = Room.databaseBuilder(context, AppDatabase.class, DATABASE_NAME).build();
+            }
         }
         return sDatabase;
     }

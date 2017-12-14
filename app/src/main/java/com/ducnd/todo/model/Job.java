@@ -17,10 +17,21 @@ import java.util.Date;
 public class Job {
     @PrimaryKey(autoGenerate = true)
     @NonNull
+    private int mId;
+
     private String mContent;
 
     @TypeConverters(DateConverter.class)
     private Date mTime;
+
+    @NonNull
+    public int getId() {
+        return mId;
+    }
+
+    public void setId(@NonNull int id) {
+        mId = id;
+    }
 
     @NonNull
     public String getContent() {

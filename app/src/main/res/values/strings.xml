@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Todo</string>
+    <string name="job_s_content">Job\'s Content</string>
 </resources>
