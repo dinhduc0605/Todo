@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -35,11 +36,7 @@ import butterknife.ButterKnife;
 
 public class AddJobDialogFragment extends DialogFragment {
 
-    public interface AddJobListener {
-        void onDialogPositiveClick(DialogFragment dialog);
-
-        void onDialogNegativeClick(DialogFragment dialog);
-    }
+    private static final String TAG = "AddJobDialogFragment";
 
     private Context mContext;
     private Date mTime;
@@ -80,9 +77,8 @@ public class AddJobDialogFragment extends DialogFragment {
                     Job job = new Job();
                     job.setContent(mEdtJobContent.getText().toString());
                     job.setTime(mTime);
-                    Executors.newSingleThreadExecutor().execute(() -> {
-                        mAddJobDialogViewModel.mDatabase.mJobDao().insertJob(job);
-                    });
+                    Executors.newSingleThreadExecutor().execute(() ->
+                            mAddJobDialogViewModel.mDatabase.mJobDao().insertJob(job));
                     dialogInterface.cancel();
                 })
                 .setNegativeButton("Cancel", (dialogInterface, i) -> dialogInterface.cancel());
@@ -107,9 +103,10 @@ public class AddJobDialogFragment extends DialogFragment {
             calendar.setTime(currentDate);
             new DatePickerDialog(mContext, (datePicker, year, month, dayOfMonth) -> {
                 mTvDate.setText(String.format("%02d - %02d - %04d", month, dayOfMonth, year));
-                mTime.setYear(year);
+                mTime.setYear(year - 1900);
                 mTime.setMonth(month);
                 mTime.setDate(dayOfMonth);
+                Log.d(TAG, mTime.toString());
             }, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH)).show();
         });
     }
